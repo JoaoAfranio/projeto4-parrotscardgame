@@ -44,11 +44,27 @@ h1 {
   background: #a7e9af;
   border: 1px solid #99cea8;
   border-radius: 5px;
+
+  position: relative;
+
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
 }
 
-.front {
+.front,
+.back {
   width: 100px;
   height: 100px;
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+.flip {
+  transform: rotateY(180deg);
 }
 
 @media (max-width: 400px) {
