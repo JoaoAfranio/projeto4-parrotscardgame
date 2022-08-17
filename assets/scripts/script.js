@@ -1,6 +1,29 @@
 let firstFlipedCard = null;
 let secondFlipedCard = null;
 
+let qntChecks = 0;
+let pairFounds = 0;
+let totalPairs = 0;
+
+let seconds = 0;
+let minutes = 0;
+
+const timerText = document.querySelector("#time");
+
+setInterval(function () {
+  if (seconds === 60) {
+    minutes++;
+    seconds = 0;
+  }
+  if (seconds < 10) {
+    timerText.innerHTML = `${minutes}:0${seconds}`;
+  } else {
+    timerText.innerHTML = `${minutes}:${seconds}`;
+  }
+
+  seconds++;
+}, 1000);
+
 const cards = [
   ["bobrossparrot", "bobrossparrot.gif"],
   ["explodyparrot", "explodyparrot.gif"],
@@ -12,17 +35,24 @@ const cards = [
 ];
 
 function startGame() {
-  const qntCards = prompt("Digite a quantidade de cartas que deseje jogar:");
+  let qntCards = prompt(
+    "Digite a quantidade de cartas que deseje jogar (4-14)"
+  );
+  while (qntCards < 4 || qntCards > 14) {
+    qntCards = prompt("Digite a quantidade de cartas que deseje jogar (4-14)");
+  }
+
+  totalPairs = qntCards / 2;
 
   const game = document.querySelector(".game");
 
   let maxIndice = cards.length - 1;
 
   let selectCard;
-  let allCardsToPlay = cards;
-  let selectedCardsToPlay = [];
+  const allCardsToPlay = cards;
+  const selectedCardsToPlay = [];
 
-  for (let i = 0; i < qntCards / 2; i++) {
+  for (let i = 0; i < totalPairs; i++) {
     let indice = randomNumberMax(maxIndice);
 
     selectCard = allCardsToPlay[indice];
@@ -57,6 +87,8 @@ function randomNumberMax(max) {
 function verificaCarta(card) {
   if (firstFlipedCard !== null && secondFlipedCard !== null) return;
 
+  qntChecks++;
+
   let idFirstCard;
   let idSecondCard;
 
@@ -76,6 +108,18 @@ function verificaCarta(card) {
       if (idFirstCard !== idSecondCard) {
         firstFlipedCard.classList.remove("flip");
         secondFlipedCard.classList.remove("flip");
+      } else {
+        pairFounds++;
+        console.log(pairFounds);
+        if (totalPairs === pairFounds) {
+          alert(
+            `Você venceu com o tempo de ${timerText.innerHTML} e ${qntChecks} jogadas`
+          );
+          // const newGame = prompt("Deseja jogar um novo jogo?");
+          // if (newGame === "sim") {
+          //   startGame();
+          // }
+        }
       }
 
       firstFlipedCard = null;
