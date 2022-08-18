@@ -102,7 +102,7 @@ function verificaCarta(card) {
 
   if (firstFlipedCard === null) {
     firstFlipedCard = card;
-  } else {
+  } else if (firstFlipedCard !== card) {
     secondFlipedCard = card;
 
     idFirstCard = firstFlipedCard.querySelector("img.back").getAttribute("id");
@@ -120,10 +120,11 @@ function verificaCarta(card) {
           alert(
             `Você venceu com o tempo de ${timerText.innerHTML} e ${qntChecks} jogadas`
           );
-          const newGame = prompt("Deseja jogar um novo jogo?");
-          if (newGame === "sim") {
-            restartGame();
+          let newGame = prompt("Deseja jogar um novo jogo?");
+          while (newGame.toLowerCase() !== "sim") {
+            newGame = prompt("Deseja jogar um novo jogo?");
           }
+          restartGame();
         }
       }
 
