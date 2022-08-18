@@ -5,11 +5,28 @@ let qntChecks = 0;
 let pairFounds = 0;
 let totalPairs = 0;
 
+// timer
 let seconds = 0;
 let minutes = 0;
 
 const timerText = document.querySelector("#time");
+const game = document.querySelector(".game");
 
+// all cards
+const cards = [
+  "bobrossparrot",
+  "explodyparrot",
+  "fiestaparrot",
+  "metalparrot",
+  "revertitparrot",
+  "tripletsparrot",
+  "unicornparrot",
+];
+
+let selectedCardsToPlay = [];
+let allCardsToPlay = cards;
+
+// timer function
 setInterval(function () {
   if (seconds === 60) {
     minutes++;
@@ -24,16 +41,6 @@ setInterval(function () {
   seconds++;
 }, 1000);
 
-const cards = [
-  ["bobrossparrot", "bobrossparrot.gif"],
-  ["explodyparrot", "explodyparrot.gif"],
-  ["fiestaparrot", "fiestaparrot.gif"],
-  ["metalparrot", "metalparrot.gif"],
-  ["revertitparrot", "revertitparrot.gif"],
-  ["tripletsparrot", "tripletsparrot.gif"],
-  ["unicornparrot", "unicornparrot.gif"],
-];
-
 function startGame() {
   let qntCards = prompt(
     "Digite a quantidade de cartas que deseje jogar (4-14)"
@@ -44,19 +51,18 @@ function startGame() {
 
   totalPairs = qntCards / 2;
 
-  const game = document.querySelector(".game");
-
   let maxIndice = cards.length - 1;
 
   let selectCard;
-  const allCardsToPlay = cards;
-  const selectedCardsToPlay = [];
+
+  allCardsToPlay = cards.slice(0);
 
   for (let i = 0; i < totalPairs; i++) {
     let indice = randomNumberMax(maxIndice);
 
     selectCard = allCardsToPlay[indice];
-    allCardsToPlay.splice(indice, 1);
+
+    allCardsToPlay.splice(indice, 1); //fix
 
     maxIndice -= 1;
 
@@ -70,7 +76,7 @@ function startGame() {
     game.innerHTML += `
       <div class="card" onClick="verificaCarta(this)">
       <img class="front" src="./src/front.png" />
-      <img class="back" id="${selectedCardsToPlay[i][0]}" src="./src/${selectedCardsToPlay[i][1]}" />
+      <img class="back" id="${selectedCardsToPlay[i]}" src="./src/${selectedCardsToPlay[i]}.gif" />
       </div>
     `;
   }
@@ -110,22 +116,31 @@ function verificaCarta(card) {
         secondFlipedCard.classList.remove("flip");
       } else {
         pairFounds++;
-        console.log(pairFounds);
         if (totalPairs === pairFounds) {
           alert(
             `Você venceu com o tempo de ${timerText.innerHTML} e ${qntChecks} jogadas`
           );
-          // const newGame = prompt("Deseja jogar um novo jogo?");
-          // if (newGame === "sim") {
-          //   startGame();
-          // }
+          const newGame = prompt("Deseja jogar um novo jogo?");
+          if (newGame === "sim") {
+            restartGame();
+          }
         }
       }
 
       firstFlipedCard = null;
       secondFlipedCard = null;
-    }, 950);
+    }, 1000);
   }
+}
+
+function restartGame() {
+  game.innerHTML = "";
+  selectedCardsToPlay = [];
+  qntChecks = 0;
+  pairFounds = 0;
+  seconds = 0;
+  minutes = 0;
+  startGame();
 }
 
 startGame();
