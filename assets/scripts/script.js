@@ -62,7 +62,7 @@ function startGame() {
 
     selectCard = allCardsToPlay[indice];
 
-    allCardsToPlay.splice(indice, 1); //fix
+    allCardsToPlay.splice(indice, 1);
 
     maxIndice -= 1;
 
